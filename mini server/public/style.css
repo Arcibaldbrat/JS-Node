@@ -1,0 +1,118 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    font-family: 'Merriweather', serif;
+    background-color: #F2E8CF;
+    color: #432818;
+}
+
+main {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+
+header {
+    background-color: #6A040F;
+    padding: 20px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    height: 60px;
+}
+
+nav a {
+    color: #F2E8CF;
+    text-decoration: none;
+    margin-left: 25px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: #606C38;
+}
+
+.active {
+    border-bottom: 2px solid #606C38;
+}
+
+
+footer {
+    background-color: #6A040F;
+    color: #F2E8CF;
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+}
+
+footer a {
+    color: #F2E8CF;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: #606C38;
+}
+
+
+.hero img {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+h1, h2 {
+    font-family: 'Playfair Display', serif;
+    margin-bottom: 15px;
+}
+
+
+.vyhody {
+    margin-top: 20px;
+}
+
+.vyhody li {
+    margin-bottom: 10px;
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+}
+
+th {
+    background-color: #6A040F;
+    color: #F2E8CF;
+    padding: 10px;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+tr:hover {
+    background-color: #f1e4c5;
+}
+
+.kontakt-info {
+    margin-bottom: 30px;
+}
+
