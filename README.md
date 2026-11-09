@@ -1,1 +1,29 @@
-# JS-Node
+# Vývoj aplikací v jazyce JavaScript
+
+## Obsah repozitáře
+
+```text
+zaklady/                      samostatná cvičení spouštěná v konzoli
+├── 01_hello.js               výpis textu do konzole
+├── 02_syntaxe.js             proměnné, datové typy, pole, objekty, funkce
+└── 03_http_server.js         server na portu 8000 nad modulem http
+
+src/                          webová aplikace nad Expressem
+├── server.js               ← tímto souborem se aplikace spouští (npm run dev)
+├── .env.example              vzor nastavení (port), zkopírovat jako .env
+├── package.json              seznam použitých balíčků (npm install)
+├── app/                      backend aplikace
+│   ├── index.js              nastavení Expressu (šablony, statické soubory, router)
+│   ├── routes/               obsluha adres
+│   │   └── defaultRouter.js  /, /index, /hello a chybová stránka pro ostatní
+│   └── views/                šablony stránek v EJS
+│       ├── index.ejs
+│       └── error.ejs
+└── public/                   staticky servírované soubory
+    └── css/
+        └── style.css
+```
+
+---
+
+> *Kód je vyvíjen ve Visual Studio Code a závisí na Node.js 26*

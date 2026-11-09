@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <title><%= titulek %></title>
+</head>
+<body>
+    <h1><%= titulek %></h1>
+
+    <form action="/posts/new" method="post">
+        <input type="text" name="nadpis" placeholder="Nadpis..." required /><br />
+        <textarea name="obsah" placeholder="Obsah..." required></textarea><br />
+        <input type="submit" value="Přidat příspěvek" />
+    </form>
+
+    <% if(typeof prispevky == 'undefined' || prispevky.length == 0) { %>
+        <p><i>Dosud neexistují žádné příspěvky.</i></p>
+    <% } else { %>
+    <% for(let i = prispevky.length - 1; i >= 0; i--) { %>
+        <div id="<%= prispevky[i].id %>">
+            <p>
+                <%= prispevky[i].nadpis %>
+                <a href="posts/<%= prispevky[i].id %>">detail</a>
+                <a href="posts/delete/<%= prispevky[i].id %>">smazat</a>
+            </p>
+        </div>
+    <% }} %>
+</body>
+</html>
