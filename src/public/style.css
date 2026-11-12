@@ -108,6 +108,80 @@ td {
     border-bottom: 1px solid #ccc;
 }
 
+section {
+    margin-bottom: 36px;
+}
+
+.favorites {
+    padding: 24px;
+    background-color: #fffaf0;
+    border: 1px solid #d8c8a4;
+    border-radius: 8px;
+}
+
+.favorites > p,
+.favorites form {
+    margin-top: 14px;
+}
+
+.favorite-entry {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+.favorite-entry input {
+    flex: 1 1 240px;
+}
+
+.favorite-entry input,
+.favorite-entry button,
+.remove-favorite {
+    min-height: 42px;
+    padding: 9px 12px;
+    font: inherit;
+}
+
+.favorite-entry button,
+.remove-favorite {
+    color: #F2E8CF;
+    background-color: #6A040F;
+    border: 0;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.favorite-entry button:hover,
+.remove-favorite:hover {
+    background-color: #432818;
+}
+
+.form-error {
+    color: #9b1c1c;
+    font-weight: bold;
+}
+
+.favorite-list {
+    margin-top: 16px;
+    list-style: none;
+}
+
+.favorite-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid #d8c8a4;
+}
+
+.menu-image {
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 8px;
+}
+
 tr:hover {
     background-color: #f1e4c5;
 }
@@ -115,4 +189,3 @@ tr:hover {
 .kontakt-info {
     margin-bottom: 30px;
 }
-

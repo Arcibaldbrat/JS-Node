@@ -8,6 +8,7 @@
 </head>
 <body>
     <h1><%= titulek %></h1>
-    <p>:-&lpar; něco se stalo...</p>
+    <p><%= typeof zprava === 'undefined' ? 'Něco se pokazilo.' : zprava %></p>
+    <p><a href="/posts">Zpět na příspěvky</a></p>
 </body>
 </html>

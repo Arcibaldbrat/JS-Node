@@ -1,57 +1,55 @@
-// nacteni kodu balicku databaze
-const jsondb = require('simple-json-db');
-// vytvoreni databaze z datoveho souboru na disku
-const db = new jsondb('../data/posts.json');
+const fs = require('node:fs');
+const path = require('node:path');
 
-// nacteni vsech prispevku z databaze
-exports.nacistPrispevky = () => {
-    return db.JSON();
+const databasePath = path.resolve(__dirname, '../../../data/posts.json');
+const examplePath = path.resolve(__dirname, '../../../data/posts.json.example');
+
+function readPosts() {
+	const posts = JSON.parse(fs.readFileSync(databasePath, 'utf8'));
+
+	if (!Array.isArray(posts)) {
+		throw new Error('Databáze příspěvků musí obsahovat pole.');
+	}
+
+	return posts;
 }
 
-// nacteni konkretniho prispevku z databaze
-exports.nacistPrispevek = (id) => {
-    const prispevky = db.JSON();
+function writePosts(posts) {
+	const temporaryPath = `${databasePath}.tmp`;
+	fs.writeFileSync(temporaryPath, `${JSON.stringify(posts, null, 2)}\n`, 'utf8');
+	fs.renameSync(temporaryPath, databasePath);
+}
 
-    for(let i = 0; i < prispevky.length; i++) {
-        if(prispevky[i].id == id) {
-            return prispevky[i];
-        }
-    }
-
-    return false;
+exports.initializeDatabase = async () => {
+	if (!fs.existsSync(databasePath)) {
+		fs.copyFileSync(examplePath, databasePath);
+	}
 };
 
-// smazani konkretniho prispevku
-exports.smazatPrispevek = (id) => {
-    const prispevky = db.JSON();
+exports.nacistPrispevky = async () => readPosts();
 
-    for(let i = 0; i < prispevky.length; i++) {
-        if(prispevky[i].id == id) {
-            prispevky.splice(i, 1);
-            db.JSON(prispevky);
-            db.sync();
-            return true;
-        }
-    }
+exports.nacistPrispevek = async (id) => {
+	return readPosts().find((prispevek) => prispevek.id === id) || false;
+};
 
-    return false;
-}
+exports.smazatPrispevek = async (id) => {
+	const prispevky = readPosts();
+	const aktualizovanePrispevky = prispevky.filter((prispevek) => prispevek.id !== id);
 
-exports.pridatPrispevek = (nadpis, obsah) => {
-    const prispevky = db.JSON();
+	if (aktualizovanePrispevky.length === prispevky.length) {
+		return false;
+	}
 
-    // urceni noveho ID
-    let noveId = 1;
-    if(prispevky.length > 0) {
-        noveId = prispevky[prispevky.length - 1].id + 1;
-    }
+	writePosts(aktualizovanePrispevky);
+	return true;
+};
 
-    prispevky.push({
-        id: noveId,
-        nadpis,
-        obsah,
-    });
+exports.pridatPrispevek = async (nadpis, obsah) => {
+	const prispevky = readPosts();
+	const noveId = prispevky.reduce((nejvyssiId, prispevek) => {
+		return Math.max(nejvyssiId, prispevek.id);
+	}, 0) + 1;
 
-    db.JSON(prispevky);
-    db.sync();
-}
+	prispevky.push({ id: noveId, nadpis, obsah });
+	writePosts(prispevky);
+};

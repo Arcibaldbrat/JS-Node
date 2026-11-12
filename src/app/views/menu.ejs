@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= titulek %></title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header>
+    <div class="navbar">
+        <img src="/obrazky/logo1.png" class="logo" alt="Trattoria Luna">
+        <nav>
+            <a href="/index.html">Úvod</a>
+            <a href="/Menu.html" class="active">Menu</a>
+            <a href="/kontakt.html">Kontakt</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <h1>Menu</h1>
+
+    <section aria-labelledby="jidlo-heading">
+        <h2 id="jidlo-heading">Jídlo</h2>
+        <table>
+            <tr><th>Název</th><th>Popis</th><th>Cena</th></tr>
+            <tr><td>Pizza Margherita</td><td>Rajčatová omáčka, mozzarella a čerstvá bazalka</td><td>185 Kč</td></tr>
+            <tr><td>Pizza Prosciutto</td><td>Šunka, sýr mozzarella a jemná rajčatová omáčka</td><td>195 Kč</td></tr>
+            <tr><td>Spaghetti Carbonara</td><td>Těstoviny s pancettou, vejcem a parmezánem</td><td>189 Kč</td></tr>
+            <tr><td>Lasagne al Forno</td><td>Domácí lasagne s masovou omáčkou a sýrem</td><td>210 Kč</td></tr>
+            <tr><td>Risotto Funghi</td><td>Krémové rizoto s houbami a parmezánem</td><td>199 Kč</td></tr>
+            <tr><td>Bruschetta</td><td>Pečený chléb s rajčaty a olivovým olejem</td><td>95 Kč</td></tr>
+        </table>
+    </section>
+
+    <section aria-labelledby="napoje-heading">
+        <h2 id="napoje-heading">Nápoje</h2>
+        <table>
+            <tr><th>Název</th><th>Popis</th><th>Cena</th></tr>
+            <tr><td>Espresso</td><td>Silná italská káva plné chuti</td><td>55 Kč</td></tr>
+            <tr><td>Cappuccino</td><td>Káva s jemnou mléčnou pěnou</td><td>65 Kč</td></tr>
+            <tr><td>Prosecco</td><td>Italské šumivé víno lehké chuti</td><td>120 Kč</td></tr>
+            <tr><td>Chianti</td><td>Červené víno z oblasti Toskánsko</td><td>130 Kč</td></tr>
+            <tr><td>Minerální voda</td><td>Neperlivá nebo perlivá dle výběru</td><td>45 Kč</td></tr>
+            <tr><td>Limonáda</td><td>Domácí citronová limonáda s mátou</td><td>75 Kč</td></tr>
+        </table>
+    </section>
+
+    <section class="favorites" aria-labelledby="favorites-heading">
+        <h2 id="favorites-heading">Moje oblíbená jídla</h2>
+        <p>Uložte si jídla, která máte rádi. Zůstanou uložená i po vypnutí aplikace.</p>
+
+        <% if(chyba) { %>
+            <p class="form-error" role="alert"><%= chyba %></p>
+        <% } %>
+        <form action="/menu/favorites" method="post">
+            <label for="favorite-name">Název jídla</label>
+            <div class="favorite-entry">
+                <input id="favorite-name" name="nazev" type="text" maxlength="100" required placeholder="Např. Pizza Margherita">
+                <button type="submit">Přidat mezi oblíbené</button>
+            </div>
+        </form>
+
+        <% if(oblibenaJidla.length === 0) { %>
+            <p>Zatím jste nepřidali žádné oblíbené jídlo.</p>
+        <% } else { %>
+            <ul class="favorite-list">
+                <% for(const jidlo of oblibenaJidla) { %>
+                    <li>
+                        <span><%= jidlo.nazev %></span>
+                        <form action="/menu/favorites/<%= jidlo.id %>/delete" method="post">
+                            <button type="submit" class="remove-favorite">Odebrat</button>
+                        </form>
+                    </li>
+                <% } %>
+            </ul>
+        <% } %>
+    </section>
+
+    <img src="/obrazky/jidlo.jpg" alt="Jídlo v restauraci" class="menu-image">
+</main>
+
+<footer>
+    <p>© 2026 Trattoria Luna</p>
+    <p>
+        <a href="https://www.instagram.com/">Instagram</a> |
+        <a href="https://www.facebook.com/">Facebook</a>
+    </p>
+</footer>
+</body>
+</html>

@@ -8,7 +8,7 @@
 </head>
 <body>
     <h1><%= titulek %></h1>
-    <% if(typeof prispevek == 'undefined' || prispevek == false) { %>
+    <% if(!prispevek) { %>
         <p><i>Takový příspěvek neexistuje.</i></p>
     <% } else { %>
         <div id="<%= prispevek.id %>">

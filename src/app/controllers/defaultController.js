@@ -9,7 +9,8 @@ exports.index = (req, res) => {
 
 // chybova stranka
 exports.error = (req, res) => {
-    res.render('error', {
+    res.status(404).render('error', {
 		titulek: 'Chyba',
+		zprava: 'Požadovaná stránka nebyla nalezena.',
 	});
 }

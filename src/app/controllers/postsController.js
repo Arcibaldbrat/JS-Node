@@ -1,51 +1,68 @@
-// model odstinuje praci s daty
 const model = require('../models/postsModel.js');
 
-// zobrazeni vsech prispevku
-exports.allPosts = (req, res) => {
+function parseId(value) {
+	if (!/^\d+$/.test(value)) {
+		return null;
+	}
+
+	const id = Number(value);
+	return Number.isSafeInteger(id) && id > 0 && id <= 2147483647 ? id : null;
+}
+
+exports.allPosts = async (req, res) => {
 	res.render('posts', {
 		titulek: 'Příspěvky',
-		prispevky: model.nacistPrispevky(),
+		prispevky: await model.nacistPrispevky(),
 	});
-}
+};
 
-// zobrazeni konkretniho prispevku
-exports.showPost = (req, res) => {
-	// vyzvednuti parametru z URL
-	const id = req.params.id;
-	// nacteni dat pomoci modelu
-	const prispevek = model.nacistPrispevek(id);
+exports.showPost = async (req, res) => {
+	const id = parseId(req.params.id);
+	const prispevek = id === null ? false : await model.nacistPrispevek(id);
 
-	res.render('post', {
+	if (!prispevek) {
+		res.status(404);
+	}
+
+	return res.render('post', {
 		titulek: 'Příspěvek',
-		prispevek: prispevek,
+		prispevek,
 	});
-}
+};
 
-// odebrani konkretniho prispevku
-exports.deletePost = (req, res) => {
-    // vyzvednuti parametru z URL
-    const id = req.params.id;
-    
-    // smazani provadi model
-    model.smazatPrispevek(id);
+exports.deletePost = async (req, res) => {
+	const id = parseId(req.params.id);
 
-    // presmerovani opet na vypis
-    res.redirect('/posts');
-}
+	if (id === null) {
+		return res.status(400).render('error', {
+			titulek: 'Neplatný příspěvek',
+			zprava: 'ID příspěvku není platné.',
+		});
+	}
 
-exports.addPost = (req, res) => {
-    // vyzvednuti dat z tela POST pozadavku
-    const nadpis = req.body.nadpis;
-    const obsah = req.body.obsah;
+	const deleted = await model.smazatPrispevek(id);
+	if (!deleted) {
+		return res.status(404).render('error', {
+			titulek: 'Příspěvek nenalezen',
+			zprava: 'Příspěvek, který chcete smazat, neexistuje.',
+		});
+	}
 
-    if(!nadpis || !obsah) {
-        return res.redirect('/posts');
-    }
+	return res.redirect('/posts');
+};
 
-    // pridavani zajistuje model
-    model.pridatPrispevek(nadpis, obsah);
+exports.addPost = async (req, res) => {
+	const nadpis = typeof req.body.nadpis === 'string' ? req.body.nadpis.trim() : '';
+	const obsah = typeof req.body.obsah === 'string' ? req.body.obsah.trim() : '';
 
-    // presmerovani opet na vypis
-    res.redirect('/posts');
-}
+	if (!nadpis || nadpis.length > 255 || !obsah) {
+		return res.status(400).render('posts', {
+			titulek: 'Příspěvky',
+			prispevky: await model.nacistPrispevky(),
+			chyba: 'Vyplňte nadpis a obsah. Nadpis může mít nejvýše 255 znaků.',
+		});
+	}
+
+	await model.pridatPrispevek(nadpis, obsah);
+	return res.redirect('/posts');
+};
