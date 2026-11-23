@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/css/account-menu.css" />
+    <script defer src="/js/account-menu.js"></script>
+    <title><%= titulek %></title>
+</head>
+<body>
+    <main>
+        <h1><%= titulek %></h1>
+        <% if(chyba) { %><p class="form-error" role="alert"><%= chyba %></p><% } %>
+        <form action="/login" method="post">
+            <label for="email">E-mail</label><br />
+            <input id="email" name="email" type="email" maxlength="254" value="<%= email %>" required autocomplete="email" /><br />
+            <label for="password">Heslo</label><br />
+            <input id="password" name="password" type="password" maxlength="128" required autocomplete="current-password" /><br />
+            <button type="submit">Přihlásit se</button>
+        </form>
+        <p>Ještě nemáte účet? <a href="/register">Zaregistrujte se</a>.</p>
+        <p><a href="/">Zpět na úvod</a></p>
+    </main>
+</body>
+</html>

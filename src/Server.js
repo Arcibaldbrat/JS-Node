@@ -3,9 +3,14 @@ require('dotenv').config();
 const app = require('./app');
 const postsModel = require('./app/models/postsModel');
 const favoritesModel = require('./app/models/favoritesModel');
+const usersModel = require('./app/models/usersModel');
 const port = Number(process.env.PORT || 8000);
 
-Promise.all([postsModel.initializeDatabase(), favoritesModel.initializeDatabase()])
+Promise.all([
+	postsModel.initializeDatabase(),
+	favoritesModel.initializeDatabase(),
+	usersModel.initializeDatabase(),
+])
 	.then(() => {
 		app.listen(port, () => {
 			console.log(`Server běží na http://localhost:${port}`);

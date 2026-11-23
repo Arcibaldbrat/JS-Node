@@ -1,5 +1,6 @@
 // nacteni balicku s knihovnou Express
 const express = require('express');
+const session = require('express-session');
 // vytvoreni backendove aplikace
 const app = express();
 
@@ -10,6 +11,23 @@ app.set('views', './app/views');
 
 // prijem dat z formularu
 app.use(express.urlencoded({ extended: false }));
+
+app.use(session({
+	secret: process.env.SESSION_SECRET || require('node:crypto').randomBytes(32).toString('hex'),
+	resave: false,
+	saveUninitialized: false,
+	cookie: {
+		httpOnly: true,
+		sameSite: 'lax',
+		secure: process.env.NODE_ENV === 'production',
+	},
+}));
+app.use((req, res, next) => {
+	res.locals.user = req.session.user || null;
+	next();
+});
+
+app.use(require('./routes/authRouter'));
 
 // routy menu se zpracovavaji pred statickymi soubory kvuli dynamickemu obsahu
 app.use(require('./routes/menuRouter'));

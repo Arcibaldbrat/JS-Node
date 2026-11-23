@@ -1,0 +1,46 @@
+.account-menu {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	flex-wrap: wrap;
+	gap: 12px;
+	padding: 10px 20px;
+	background: #fffaf0;
+	border-bottom: 1px solid #d8c8a4;
+	color: #432818;
+	font: 14px Arial, sans-serif;
+}
+
+.account-menu a {
+	color: #6a040f;
+	font-weight: 600;
+}
+
+.account-menu form {
+	margin: 0;
+}
+
+.account-menu button {
+	margin: 0;
+	padding: 6px 10px;
+	color: #fffaf0;
+	background: #6a040f;
+	border: 0;
+	border-radius: 4px;
+	font: inherit;
+	cursor: pointer;
+}
+
+.account-menu button:hover {
+	background: #432818;
+}
+
+@media (max-width: 600px) {
+	.account-menu {
+		justify-content: flex-start;
+		gap: 8px;
+		padding: 10px;
+	}
+}

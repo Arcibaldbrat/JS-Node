@@ -42,3 +42,10 @@ npm run dev
 ```
 
 Příspěvky lze přidávat a mazat na stránce `/posts`.
+
+Uživatelé se mohou registrovat na `/register`, přihlásit na `/login` a svůj
+účet spravovat na `/account`. Účet lze zrušit po potvrzení heslem. Uživatelské
+účty se ukládají do `data/users.json`; hesla jsou uložena pouze jako bezpečné
+hashe. Do souboru `.env` nastavte vlastní náhodný `SESSION_SECRET`; v produkci
+je navíc potřeba HTTPS a trvalé úložiště session. Nabídka přihlášeného účtu
+nebo odkazů na přihlášení a registraci je dostupná na všech stránkách.

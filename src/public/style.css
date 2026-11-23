@@ -189,3 +189,22 @@ tr:hover {
 .kontakt-info {
     margin-bottom: 30px;
 }
+
+.account-danger {
+    margin-top: 32px;
+    padding: 24px;
+    background-color: #fffaf0;
+    border: 1px solid #9b1c1c;
+    border-radius: 8px;
+}
+
+.account-danger form {
+    margin-top: 14px;
+}
+
+input,
+button {
+    margin: 6px 0 12px;
+    padding: 8px 10px;
+    font: inherit;
+}
