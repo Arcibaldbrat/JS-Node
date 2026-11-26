@@ -14,13 +14,17 @@
     <% if(typeof chyba !== 'undefined' && chyba) { %>
         <p role="alert"><%= chyba %></p>
     <% } %>
-    <form action="/posts/new" method="post">
-        <label for="nadpis">Nadpis</label><br />
-        <input id="nadpis" type="text" name="nadpis" maxlength="255" required /><br />
-        <label for="obsah">Obsah</label><br />
-        <textarea id="obsah" name="obsah" required></textarea><br />
-        <button type="submit">Přidat příspěvek</button>
-    </form>
+    <% if(user) { %>
+        <form action="/posts/new" method="post">
+            <label for="nadpis">Nadpis</label><br />
+            <input id="nadpis" type="text" name="nadpis" maxlength="255" required /><br />
+            <label for="obsah">Obsah</label><br />
+            <textarea id="obsah" name="obsah" required></textarea><br />
+            <button type="submit">Přidat příspěvek</button>
+        </form>
+    <% } else { %>
+        <p><a href="/login">Pro přidání příspěvku se přihlaste.</a></p>
+    <% } %>
 
     <% if(prispevky.length == 0) { %>
         <p><i>Dosud neexistují žádné příspěvky.</i></p>
@@ -28,9 +32,12 @@
     <% for(const prispevek of prispevky) { %>
         <div id="<%= prispevek.id %>">
             <p><%= prispevek.nadpis %> <a href="/posts/<%= prispevek.id %>">Detail</a></p>
-            <form action="/posts/<%= prispevek.id %>/delete" method="post">
-                <button type="submit">Smazat</button>
-            </form>
+            <p>Autor: <%= prispevek.autor ? prispevek.autor.email : 'Původní příspěvek' %></p>
+            <% if(user && prispevek.autor && user.id === prispevek.autor.id) { %>
+                <form action="/posts/<%= prispevek.id %>/delete" method="post">
+                    <button type="submit">Smazat</button>
+                </form>
+            <% } %>
         </div>
     <% }} %>
     <p><a href="/">Zpět na úvod</a></p>

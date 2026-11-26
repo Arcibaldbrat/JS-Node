@@ -51,32 +51,36 @@
 
     <section class="favorites" aria-labelledby="favorites-heading">
         <h2 id="favorites-heading">Moje oblíbená jídla</h2>
-        <p>Uložte si jídla, která máte rádi. Zůstanou uložená i po vypnutí aplikace.</p>
+        <% if(user) { %>
+            <p>Uložte si jídla, která máte rádi. Zůstanou uložená i po vypnutí aplikace.</p>
 
-        <% if(chyba) { %>
-            <p class="form-error" role="alert"><%= chyba %></p>
-        <% } %>
-        <form action="/menu/favorites" method="post">
-            <label for="favorite-name">Název jídla</label>
-            <div class="favorite-entry">
-                <input id="favorite-name" name="nazev" type="text" maxlength="100" required placeholder="Např. Pizza Margherita">
-                <button type="submit">Přidat mezi oblíbené</button>
-            </div>
-        </form>
+            <% if(chyba) { %>
+                <p class="form-error" role="alert"><%= chyba %></p>
+            <% } %>
+            <form action="/menu/favorites" method="post">
+                <label for="favorite-name">Název jídla</label>
+                <div class="favorite-entry">
+                    <input id="favorite-name" name="nazev" type="text" maxlength="100" required placeholder="Např. Pizza Margherita">
+                    <button type="submit">Přidat mezi oblíbené</button>
+                </div>
+            </form>
 
-        <% if(oblibenaJidla.length === 0) { %>
-            <p>Zatím jste nepřidali žádné oblíbené jídlo.</p>
+            <% if(oblibenaJidla.length === 0) { %>
+                <p>Zatím jste nepřidali žádné oblíbené jídlo.</p>
+            <% } else { %>
+                <ul class="favorite-list">
+                    <% for(const jidlo of oblibenaJidla) { %>
+                        <li>
+                            <span><%= jidlo.nazev %></span>
+                            <form action="/menu/favorites/<%= jidlo.id %>/delete" method="post">
+                                <button type="submit" class="remove-favorite">Odebrat</button>
+                            </form>
+                        </li>
+                    <% } %>
+                </ul>
+            <% } %>
         <% } else { %>
-            <ul class="favorite-list">
-                <% for(const jidlo of oblibenaJidla) { %>
-                    <li>
-                        <span><%= jidlo.nazev %></span>
-                        <form action="/menu/favorites/<%= jidlo.id %>/delete" method="post">
-                            <button type="submit" class="remove-favorite">Odebrat</button>
-                        </form>
-                    </li>
-                <% } %>
-            </ul>
+            <p><a href="/login">Přihlaste se</a>, abyste mohli ukládat a spravovat svá oblíbená jídla.</p>
         <% } %>
     </section>
 

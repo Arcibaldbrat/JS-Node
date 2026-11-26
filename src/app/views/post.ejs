@@ -16,6 +16,7 @@
         <div id="<%= prispevek.id %>">
             <h2><%= prispevek.nadpis %></h2>
             <p><%= prispevek.obsah %></p>
+            <p>Autor: <%= prispevek.autor ? prispevek.autor.email : 'Původní příspěvek' %></p>
         </div>
     <% } %>
     <a href="/posts">Zpět</a>

@@ -25,24 +25,31 @@ exports.initializeDatabase = async () => {
 	}
 };
 
-exports.nacistOblibenaJidla = async () => readFavorites();
+exports.nacistOblibenaJidla = async (autorId) => {
+	return readFavorites().filter((jidlo) => jidlo.autor?.id === autorId);
+};
 
-exports.pridatOblibeneJidlo = async (nazev) => {
+exports.pridatOblibeneJidlo = async (nazev, autor) => {
 	const jidla = readFavorites();
 
-	if (jidla.some((jidlo) => jidlo.nazev.toLocaleLowerCase('cs') === nazev.toLocaleLowerCase('cs'))) {
+	if (jidla.some((jidlo) => {
+		return jidlo.autor?.id === autor.id
+			&& jidlo.nazev.toLocaleLowerCase('cs') === nazev.toLocaleLowerCase('cs');
+	})) {
 		return false;
 	}
 
 	const noveId = jidla.reduce((nejvyssiId, jidlo) => Math.max(nejvyssiId, jidlo.id), 0) + 1;
-	jidla.push({ id: noveId, nazev });
+	jidla.push({ id: noveId, nazev, autor: { id: autor.id, email: autor.email } });
 	writeFavorites(jidla);
 	return true;
 };
 
-exports.odebratOblibeneJidlo = async (id) => {
+exports.odebratOblibeneJidlo = async (id, autorId) => {
 	const jidla = readFavorites();
-	const aktualizovanaJidla = jidla.filter((jidlo) => jidlo.id !== id);
+	const aktualizovanaJidla = jidla.filter((jidlo) => {
+		return jidlo.id !== id || jidlo.autor?.id !== autorId;
+	});
 
 	if (aktualizovanaJidla.length === jidla.length) {
 		return false;
@@ -50,4 +57,16 @@ exports.odebratOblibeneJidlo = async (id) => {
 
 	writeFavorites(aktualizovanaJidla);
 	return true;
+};
+
+exports.smazatOblibenaJidlaAutora = async (autorId) => {
+	const jidla = readFavorites();
+	const aktualizovanaJidla = jidla.filter((jidlo) => jidlo.autor?.id !== autorId);
+
+	if (aktualizovanaJidla.length === jidla.length) {
+		return 0;
+	}
+
+	writeFavorites(aktualizovanaJidla);
+	return jidla.length - aktualizovanaJidla.length;
 };

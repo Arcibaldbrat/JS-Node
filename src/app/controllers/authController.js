@@ -1,4 +1,6 @@
 const usersModel = require('../models/usersModel');
+const postsModel = require('../models/postsModel');
+const favoritesModel = require('../models/favoritesModel');
 
 function isValidEmail(email) {
 	return email.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -175,7 +177,13 @@ exports.deleteAccount = async (req, res) => {
 		});
 	}
 
-	await usersModel.deleteUser(user.id);
+	await postsModel.smazatPrispevkyAutora(user.id);
+	await favoritesModel.smazatOblibenaJidlaAutora(user.id);
+	const deleted = await usersModel.deleteUser(user.id);
+	if (!deleted) {
+		throw new Error('Účet se nepodařilo odstranit.');
+	}
+
 	return destroySession(req, res, (error) => {
 		console.error('Nepodařilo se ukončit session po zrušení účtu:', error);
 		if (!res.headersSent) {

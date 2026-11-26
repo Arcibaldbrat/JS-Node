@@ -32,9 +32,11 @@ exports.nacistPrispevek = async (id) => {
 	return readPosts().find((prispevek) => prispevek.id === id) || false;
 };
 
-exports.smazatPrispevek = async (id) => {
+exports.smazatPrispevek = async (id, autorId) => {
 	const prispevky = readPosts();
-	const aktualizovanePrispevky = prispevky.filter((prispevek) => prispevek.id !== id);
+	const aktualizovanePrispevky = prispevky.filter((prispevek) => {
+		return prispevek.id !== id || prispevek.autor?.id !== autorId;
+	});
 
 	if (aktualizovanePrispevky.length === prispevky.length) {
 		return false;
@@ -44,12 +46,29 @@ exports.smazatPrispevek = async (id) => {
 	return true;
 };
 
-exports.pridatPrispevek = async (nadpis, obsah) => {
+exports.smazatPrispevkyAutora = async (autorId) => {
+	const prispevky = readPosts();
+	const aktualizovanePrispevky = prispevky.filter((prispevek) => prispevek.autor?.id !== autorId);
+
+	if (aktualizovanePrispevky.length === prispevky.length) {
+		return 0;
+	}
+
+	writePosts(aktualizovanePrispevky);
+	return prispevky.length - aktualizovanePrispevky.length;
+};
+
+exports.pridatPrispevek = async (nadpis, obsah, autor) => {
 	const prispevky = readPosts();
 	const noveId = prispevky.reduce((nejvyssiId, prispevek) => {
 		return Math.max(nejvyssiId, prispevek.id);
 	}, 0) + 1;
 
-	prispevky.push({ id: noveId, nadpis, obsah });
+	prispevky.push({
+		id: noveId,
+		nadpis,
+		obsah,
+		autor: { id: autor.id, email: autor.email },
+	});
 	writePosts(prispevky);
 };

@@ -32,6 +32,7 @@ exports.showPost = async (req, res) => {
 
 exports.deletePost = async (req, res) => {
 	const id = parseId(req.params.id);
+	const autorId = res.locals.user.id;
 
 	if (id === null) {
 		return res.status(400).render('error', {
@@ -40,11 +41,11 @@ exports.deletePost = async (req, res) => {
 		});
 	}
 
-	const deleted = await model.smazatPrispevek(id);
+	const deleted = await model.smazatPrispevek(id, autorId);
 	if (!deleted) {
 		return res.status(404).render('error', {
 			titulek: 'Příspěvek nenalezen',
-			zprava: 'Příspěvek, který chcete smazat, neexistuje.',
+			zprava: 'Příspěvek neexistuje nebo jej nemůžete smazat.',
 		});
 	}
 
@@ -63,6 +64,6 @@ exports.addPost = async (req, res) => {
 		});
 	}
 
-	await model.pridatPrispevek(nadpis, obsah);
+	await model.pridatPrispevek(nadpis, obsah, res.locals.user);
 	return res.redirect('/posts');
 };

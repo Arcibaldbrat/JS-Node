@@ -1,5 +1,13 @@
 const model = require('../models/favoritesModel');
 
+async function loadFavorites(res) {
+	if (!res.locals.user) {
+		return [];
+	}
+
+	return model.nacistOblibenaJidla(res.locals.user.id);
+}
+
 function parseId(value) {
 	if (!/^\d+$/.test(value)) {
 		return null;
@@ -12,7 +20,7 @@ function parseId(value) {
 exports.zobrazitMenu = async (req, res) => {
 	return res.render('menu', {
 		titulek: 'Trattoria Luna - Menu',
-		oblibenaJidla: await model.nacistOblibenaJidla(),
+		oblibenaJidla: await loadFavorites(res),
 		chyba: req.query.chyba || '',
 	});
 };
@@ -23,16 +31,16 @@ exports.pridatOblibeneJidlo = async (req, res) => {
 	if (!nazev || nazev.length > 100) {
 		return res.status(400).render('menu', {
 			titulek: 'Trattoria Luna - Menu',
-			oblibenaJidla: await model.nacistOblibenaJidla(),
+			oblibenaJidla: await loadFavorites(res),
 			chyba: 'Zadejte název jídla (nejvýše 100 znaků).',
 		});
 	}
 
-	const added = await model.pridatOblibeneJidlo(nazev);
+	const added = await model.pridatOblibeneJidlo(nazev, res.locals.user);
 	if (!added) {
 		return res.status(400).render('menu', {
 			titulek: 'Trattoria Luna - Menu',
-			oblibenaJidla: await model.nacistOblibenaJidla(),
+			oblibenaJidla: await loadFavorites(res),
 			chyba: 'Toto jídlo už mezi oblíbenými máte.',
 		});
 	}
@@ -49,11 +57,11 @@ exports.odebratOblibeneJidlo = async (req, res) => {
 		});
 	}
 
-	const deleted = await model.odebratOblibeneJidlo(id);
+	const deleted = await model.odebratOblibeneJidlo(id, res.locals.user.id);
 	if (!deleted) {
 		return res.status(404).render('error', {
 			titulek: 'Jídlo nenalezeno',
-			zprava: 'Oblíbené jídlo, které chcete odebrat, neexistuje.',
+			zprava: 'Oblíbené jídlo neexistuje nebo jej nemůžete odebrat.',
 		});
 	}
 
