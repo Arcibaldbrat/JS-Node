@@ -27,16 +27,8 @@ app.use((req, res, next) => {
 	next();
 });
 
-app.use(require('./routes/authRouter'));
-
-// routy menu se zpracovavaji pred statickymi soubory kvuli dynamickemu obsahu
-app.use(require('./routes/menuRouter'));
-
-// staticke soubory (CSS, obrazky, ...)
-app.use(express.static('public'));
-
-// o zpracovani URL se stara router
-app.use(require('./routes/defaultRouter'));
+// Router zpracovava dynamicke URL a servira staticke soubory.
+app.use(require('../router'));
 
 app.use((error, req, res, next) => {
 	console.error('Chyba při zpracování požadavku:', error);

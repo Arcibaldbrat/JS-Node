@@ -1,9 +1,9 @@
-import express from 'express';
-import { addPost, deletePost } from './controllers/postController.js';
-
+const express = require('express');
 const router = express.Router();
 
-router.post('/add', addPost);
-router.post('/delete', deletePost);
+router.use(require('./app/routes/authRouter.js'));
+router.use(require('./app/routes/menuRouter.js'));
+router.use(express.static('public'));
+router.use(require('./app/routes/defaultRouter.js'));
 
-export default router;
+module.exports = router;
